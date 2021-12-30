@@ -1,11 +1,13 @@
 package chesspieces;
 
-public class Wolf extends Shape{
+public class Wolf extends Shape {
 
+    MonsterType wolf;
 
     public Wolf(int colPosition, int rowPosition) {
         this.colPosition = colPosition;
         this.rowPosition = rowPosition;
+        this.wolf = MonsterType.WOLF;
     }
 
 
@@ -25,7 +27,7 @@ public class Wolf extends Shape{
     }
 
     @Override
-    public void setRowPosition(int rowPosition){
+    public void setRowPosition(int rowPosition) {
         this.rowPosition = rowPosition;
     }
 
@@ -44,6 +46,9 @@ public class Wolf extends Shape{
         return getColPosition() + 1;
     }
 
+    public MonsterType getType() {
+        return MonsterType.WOLF;
+    }
 
 
 }

@@ -12,16 +12,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 public class Board {
-    public BoardSquare[][] boardSquares = new BoardSquare[8][8];;
+    public BoardSquare[][] boardSquares = new BoardSquare[8][8];
     GridPane board = new GridPane();
     StackPane stackPane;
-    private Wolf[] wolf = new Wolf[4];
-    private Sheep sheep = new Sheep(randomEvenInt(), 7);
+    private final Wolf[] wolf = new Wolf[4];
+    private final Sheep sheep = new Sheep(2, 7);
 
     public int randomEvenInt(){
-        int v  = 0 + (int) (Math.random() * 7);
+        int v  = (int) (Math.random() * 7);
         return v%2 == 0?v:randomEvenInt();
     }
+
+
 
     public Board() {
 
@@ -29,7 +31,7 @@ public class Board {
             for (int col = 0; col < 8; col++) {
                 BoardSquare boardSquare;
                 if ((i % 2) == 0) {
-                    boardSquare = new BoardSquare(Color.BLANCHEDALMOND);
+                    boardSquare = new BoardSquare(Color.BEIGE);
                     StackPane square = getBoardSquare(boardSquare);
                     board.add(square, col, row);
                 } else {
@@ -44,16 +46,39 @@ public class Board {
         }
         for (int row = 0; row < 8; row++) {
             RowConstraints constrains = new RowConstraints();
-            constrains.setPercentHeight(20);
             board.getRowConstraints().add(constrains);
         }
         for (int col = 0; col < 8; col++) {
             ColumnConstraints constrains = new ColumnConstraints();
-            constrains.setPercentWidth(20);
             board.getColumnConstraints().add(constrains);
         }
-        createPawns();
+        createPawns();    }
+
+
+    public void createPawns() {
+        NumberBinding radius = Bindings.when(stackPane.widthProperty().greaterThan(stackPane.heightProperty())).then(stackPane.heightProperty().
+                subtract(12).divide(2)).otherwise(stackPane.widthProperty().subtract(12).divide(2));
+
+        for (int i = 0; i < wolf.length; i++) {
+            this.wolf[i] = new Wolf(i * 2 + 1, 0);
+            boardSquares[wolf[i].getRowPosition()][wolf[i].getColPosition()].setBusy(true);
+            wolf[i].setFill(Color.DARKGREY);
+            wolf[i].radiusProperty().bind(radius);
+        }
+
+        sheep.radiusProperty().bind(radius);
+        sheep.setFill(Color.CHOCOLATE);
+        boardSquares[sheep.getRowPosition()][sheep.getColPosition()].setBusy(true);
     }
+
+    public Wolf[] getWolf() {
+        return wolf;
+    }
+
+    public Sheep getSheep() {
+        return sheep;
+    }
+
 
     public GridPane getBoard() {
         return board;
@@ -72,29 +97,6 @@ public class Board {
         stackPane.getChildren().addAll(boardSquare);
         this.stackPane = stackPane;
         return stackPane;
-    }
-
-    public void createPawns() {
-        NumberBinding radiusProperty = Bindings.when(stackPane.widthProperty().greaterThan(stackPane.heightProperty())).then(stackPane.heightProperty().
-                subtract(12).divide(2)).otherwise(stackPane.widthProperty().subtract(12).divide(2));
-
-        for (int i = 0; i < wolf.length; i++) {
-            this.wolf[i] = new Wolf(i * 2 + 1, 0);
-            boardSquares[wolf[i].getRowPosition()][wolf[i].getColPosition()].setBusy(true);
-            wolf[i].setFill(Color.DARKGREY);
-            wolf[i].radiusProperty().bind(radiusProperty);
-        }
-
-        sheep.radiusProperty().bind(radiusProperty);
-        sheep.setFill(Color.CHOCOLATE);
-        boardSquares[sheep.getRowPosition()][sheep.getColPosition()].setBusy(true);
-    }
-
-    public Wolf[] getWolf() {
-        return wolf;
-    }
-    public Sheep getSheep() {
-        return sheep;
     }
 
 }

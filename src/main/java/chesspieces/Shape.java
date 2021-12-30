@@ -7,7 +7,9 @@ public abstract class Shape extends Circle {
     protected int colPosition;
     protected int rowPosition;
 
-
+    public enum MonsterType {
+        WOLF, SHEEP
+    }
 
     public int getColPosition() {
         return colPosition;
@@ -38,6 +40,7 @@ public abstract class Shape extends Circle {
     public int moveRight() {
         return getColPosition() + 1;
     }
+
 
 
 }
